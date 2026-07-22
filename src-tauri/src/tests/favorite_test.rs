@@ -8,7 +8,7 @@ use chrono::Local;
 pub fn test_repository() {
     let favorite = Favorite {
         id: 0,
-        path: "/tmp/test".to_string(),
+        path: format!("/tmp/test-{}", Local::now().timestamp()),
         created_at: Local::now().to_string(),
     };
 

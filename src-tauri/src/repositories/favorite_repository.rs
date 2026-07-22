@@ -35,8 +35,9 @@ pub fn create(favorite: Favorite) -> Result<()> {
     let mut conn = connect()?;
 
     conn.execute(
-        "INSERT INTO favorites (path) VALUES (?1)"
-        ,[&favorite.path]
+        "INSERT INTO favorites(path, created_at)
+             VALUES(?1, ?2)"
+        , (&favorite.path, &favorite.created_at)
     )?;
     
     Ok(())

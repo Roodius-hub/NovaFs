@@ -23,7 +23,7 @@ pub fn migrate(conn: &Connection) -> Result<()> {
     conn.execute("
         CREATE TABLE IF NOT EXISTS settings (
             key TEXT NOT NULL UNIQUE,
-            value TEXT NOT NULL UNIQUE,
+            value TEXT NOT NULL UNIQUE
         );
         ", [])?;
 
