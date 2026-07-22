@@ -1,5 +1,10 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-mod db;
+pub mod db;
+pub mod models;
+pub mod repositories;
+pub mod services;
+pub mod utils;
+pub mod tests;
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -8,9 +13,10 @@ fn greet(name: &str) -> String {
 
 // #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-     db::connection::connect().unwrap();
+     let  conn = db::connection::connect().unwrap();
      println!("Database Connected");
-
+     db::migrations::migrate(&conn).unwrap();
+     tests::favorite_test::test_repository(); 
     
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
