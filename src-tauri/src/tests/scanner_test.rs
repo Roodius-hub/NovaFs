@@ -1,12 +1,14 @@
 
 use std::path::Path;
-use crate::filesystem::{scanner::scan_directory};
+use crate::filesystem::{events::ScanEvent, scanner::scan};
 
 pub fn test_scanner() {
-    let nodes = scan_directory(Path::new("."));
+    let mut emit = |event:ScanEvent| {
+        println!("{:?}", event);
+    };
     
-    
-    while let Ok(node) = &nodes {
-        println!("{:#?}", node);   
-    }      
+    match scan(Path::new("."), &mut emit) {
+        Ok(nodes) => println!("{:#?}", nodes),
+        Err(err) => println!("Scan failed: {}",err),
+    }
 }
