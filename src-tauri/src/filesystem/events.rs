@@ -1,10 +1,12 @@
 
 
+use crate::filesystem::progress::ScanProgress;
+
 #[derive(Debug, Clone)]
 pub enum ScanEvent {
     Started,
-    Progress,
+    Progress(ScanProgress),
     Completed, 
     Cancelled,
-    Error,
+    Error(String),
 }

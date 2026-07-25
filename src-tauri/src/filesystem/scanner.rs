@@ -3,10 +3,11 @@ use std::fs::DirEntry;
 use std::io;
 use std::path::Path;
 
+use crate::filesystem::events::ScanEvent;
 use crate::filesystem::node::{FileNode};
 use crate::filesystem::progress::ScanProgress;
 
-pub fn scan_directory(path: &Path, progress:&mut ScanProgress) -> io::Result<Vec<FileNode>> {
+pub fn scan_directory<F>(path: &Path, progress:&mut ScanProgress, emit: &mut F) -> io::Result<Vec<FileNode>> where F: FnMut(ScanEvent) {
     let entries = std::fs::read_dir(path)?;
     let mut nodes = Vec::new();
     
@@ -14,17 +15,20 @@ pub fn scan_directory(path: &Path, progress:&mut ScanProgress) -> io::Result<Vec
         progress.folders_scanned += 1;
         let mut node = scan_entry(entry?)?;
         if node.is_dir {
-             match scan_directory(&node.path, progress) {
+             match scan_directory(&node.path, progress, emit) {
                 Ok(children) => node.children = children,
                 Err(err) => {
                     eprintln!("Skipping {}: {}", node.path.display(), err);
+                    emit(ScanEvent::Error(err.to_string()));
                 }
             } 
         } else {
             progress.files_scanned += 1;
+            emit(ScanEvent::Progress(progress.clone()));
         }
         nodes.push(node);
     }
+    emit(ScanEvent::Completed);
     Ok(nodes)
 }
 
