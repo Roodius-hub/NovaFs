@@ -1,6 +1,6 @@
 
 use std::path::Path;
-use crate::filesystem::{node, scanner::scan_directory};
+use crate::filesystem::{scanner::scan_directory};
 
 pub fn test_scanner() {
     let nodes = scan_directory(Path::new("."));
