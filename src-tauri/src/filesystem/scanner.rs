@@ -7,6 +7,22 @@ use crate::filesystem::events::ScanEvent;
 use crate::filesystem::node::{FileNode};
 use crate::filesystem::progress::ScanProgress;
 
+pub fn scan<F>(path:&Path, emit: &mut F) -> io::Result::Vec<FileNode> where F:FnMut(ScanEvent) {
+    let mut progress = ScanProgress::default();
+
+    emit(ScanEvent::Started);
+
+    let result = scan_directory(&path, &mut progress, emit);
+
+    match &result {
+        Ok(_) => emit(ScanEvent::Completed),
+        Err(err) => emit(ScanEvent::Error(err.to_string())),
+    }
+
+    result
+        
+}
+
 pub fn scan_directory<F>(path: &Path, progress:&mut ScanProgress, emit: &mut F) -> io::Result<Vec<FileNode>> where F: FnMut(ScanEvent) {
     let entries = std::fs::read_dir(path)?;
     let mut nodes = Vec::new();
