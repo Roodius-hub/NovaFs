@@ -3,7 +3,9 @@
 use std::path::PathBuf;
 use std::time::SystemTime;
 
-#[derive(Debug, Clone)]
+use serde::Serialize;
+
+#[derive(Debug, Clone,Serialize)]
 pub struct FileNode {
     pub name: String,
     pub path: PathBuf,
