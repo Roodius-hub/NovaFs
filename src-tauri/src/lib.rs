@@ -2,7 +2,7 @@
 
 use std::path::Path;
 
-use crate::filesystem::{events::ScanEvent, node::FileNode, scanner::scan};
+use crate::filesystem::{events::ScanEvent, scanner::scan};
 
 pub mod db;
 pub mod models;
@@ -18,25 +18,6 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-#[tauri::command]
-pub fn check_file(
-    path: String,
-    query: String,
-) -> Result<Vec<FileNode>, String> {
-    let mut emit = |event: ScanEvent| {
-        println!("{:?}", event);
-    };
-
-    // Scan the directory only once
-    let tree = scan(Path::new(&path), &mut emit)
-        .map_err(|err| err.to_string())?;
-
-    // Search inside the scanned tree
-    let results = filesystem::search::search(&tree, &query);
-
-    Ok(results)
-}
-
 // #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
      let  conn = db::connection::connect().unwrap();
@@ -46,10 +27,19 @@ pub fn run() {
      tests::favorite_test::test_repository(); 
       // let tree = tests::scanner_test::test_scanner();
 
-
+      let mut emit = |event: ScanEvent| {
+          println!("{:?}", event);
+      };
+      
+      let tree = scan(Path::new("."), &mut emit).unwrap();
+      
+      let results = filesystem::search::search(&tree, "main");
+      
+      println!("This is Your result-> {:#?}", results);
+      
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet, check_file])
+        .invoke_handler(tauri::generate_handler![greet])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
