@@ -468,6 +468,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "colored_text"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "745f8a64d62b40a725042e502af674abe0fb85726224780f1b2ff70552a4914c"
+
+[[package]]
 name = "combine"
 version = "4.6.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2081,6 +2087,7 @@ name = "novafs"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "colored_text",
  "rusqlite",
  "serde",
  "serde_json",

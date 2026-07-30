@@ -1,8 +1,8 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 
 use std::path::Path;
-
-use crate::filesystem::{events::ScanEvent, scanner::scan};
+use colored_text::Colorize;
+use crate::filesystem::{events::ScanEvent, filter::Filter, scanner::scan};
 
 pub mod db;
 pub mod models;
@@ -24,7 +24,7 @@ pub fn run() {
      println!("Database Connected");
      db::migrations::migrate(&conn).unwrap();
      
-     tests::favorite_test::test_repository(); 
+     // tests::favorite_test::test_repository(); 
       // let tree = tests::scanner_test::test_scanner();
 
       let mut emit = |event: ScanEvent| {
@@ -33,9 +33,14 @@ pub fn run() {
       
       let tree = scan(Path::new("."), &mut emit).unwrap();
       
-      let results = filesystem::search::search(&tree, "main");
+      // let results = filesystem::search::search(&tree, "main");
+      // println!("{}","This is Your result".red());
+      // println!("{:?}", results);
       
-      println!("This is Your result-> {:#?}", results);
+      let result = filesystem::filter::filter(&tree, &Filter::Extension("json".to_string()));
+
+      println!("{}", "yout filtered files: => ".blue());
+      println!("{:?}", result);
       
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
