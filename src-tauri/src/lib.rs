@@ -37,10 +37,15 @@ pub fn run() {
       // println!("{}","This is Your result".red());
       // println!("{:?}", results);
       
-      let result = filesystem::filter::filter(&tree, &Filter::Extension("json".to_string()));
+      // let result = filesystem::filter::filter(&tree, &Filter::Extension("json".to_string()));
 
-      println!("{}", "yout filtered files: => ".blue());
-      println!("{:?}", result);
+      // println!("{}", "yout filtered files: => ".blue());
+      // println!("{:?}", result);
+
+
+      let size = filesystem::size::size(&tree);
+      let size_in_string = filesystem::size::format_size(size);
+      println!("size: => {}", size_in_string);
       
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
