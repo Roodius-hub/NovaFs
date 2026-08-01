@@ -1,8 +1,7 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 
 use std::path::Path;
-use colored_text::Colorize;
-use crate::filesystem::{events::ScanEvent, filter::Filter, scanner::scan};
+use crate::filesystem::{events::ScanEvent, scanner::scan};
 
 pub mod db;
 pub mod models;
