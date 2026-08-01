@@ -1,7 +1,7 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 
 use std::path::Path;
-use crate::filesystem::{events::ScanEvent, scanner::scan};
+use crate::filesystem::{events::{ScanEvent, WatchEvent}, scanner::scan, watcher::watch};
 
 pub mod db;
 pub mod models;
@@ -50,6 +50,12 @@ pub fn run() {
       for val in meta.iter() {
           println!("{:?}", val);
       }
+
+      let emit = |event: WatchEvent| {
+          println!("{:?}", event);
+      };
+      
+      watch(Path::new("."), emit);
       
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())

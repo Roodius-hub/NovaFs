@@ -25,4 +25,4 @@ serde_json = "1"
 rusqlite = { version = "0.37", features = ["bundled"] }
 chrono = "0.4.45"
 colored_text = "0.5.1"
-
+notify = "8"
