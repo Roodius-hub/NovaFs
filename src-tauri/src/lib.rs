@@ -46,6 +46,11 @@ pub fn run() {
       let size = filesystem::size::size(&tree);
       let size_in_string = filesystem::size::format_size(size);
       println!("size: => {}", size_in_string);
+
+      let meta = filesystem::metadata::get_metadata(Path::new("."));
+      for val in meta.iter() {
+          println!("{:?}", val);
+      }
       
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
