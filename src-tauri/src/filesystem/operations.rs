@@ -1,6 +1,6 @@
 use std::path::Path;
 use std::io::{self, Write};
-use std::fs::{create_dir, rename, remove_file,remove_dir,write, copy};
+use std::fs::{copy, create_dir, remove_dir_all, remove_file, rename};
 use std::fs::File;
 
 pub fn create_folder(path: &Path) -> io::Result<()> {
@@ -8,8 +8,7 @@ pub fn create_folder(path: &Path) -> io::Result<()> {
 }
 
 pub fn create_file(path: &Path) -> io::Result<()> {
-    let mut file = File::create(path)?;
-        file.write_all(b"")?;
+     File::create(path)?;
         Ok(())
 }
 
@@ -29,8 +28,9 @@ pub fn move_file(src: &Path, dest: &Path) -> io::Result<()> {
 }
 
 pub fn delete(path: &Path) -> io::Result<()> {
-    if path.is_dir() {
-        remove_dir(path)
+    let meta = path.metadata()?;
+    if meta.is_dir() {
+        remove_dir_all(path)
     } else {
         remove_file(path)
     }
