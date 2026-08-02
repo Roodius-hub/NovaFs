@@ -8,3 +8,4 @@ pub mod search;
 pub mod watcher;
 pub mod progress;
 pub mod events;
+pub mod operations;
