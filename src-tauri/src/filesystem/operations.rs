@@ -1,5 +1,5 @@
 use std::path::Path;
-use std::io::{self, Write};
+use std::io::{self};
 use std::fs::{copy, create_dir, remove_dir_all, remove_file, rename};
 use std::fs::File;
 

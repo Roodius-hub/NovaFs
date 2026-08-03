@@ -1,7 +1,7 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 
 use std::path::Path;
-use crate::filesystem::{events::{ScanEvent, WatchEvent}, operations::{create_file}, scanner::scan, watcher::watch};
+use crate::{filesystem::{events::{ScanEvent, WatchEvent}, operations::{create_file, delete}, scanner::scan, watcher::watch}};
 
 pub mod db;
 pub mod models;
@@ -53,9 +53,9 @@ pub fn run() {
 
       let makefile = Path::new("/home/roodi/Documents/hello.txt");
       
-      match create_file(makefile) {
-          Ok(()) => println!("File created successfully."),
-          Err(err) => println!("Failed to create file: {}", err),
+      match filesystem::operations::delete(makefile) {
+          Ok(()) => println!("File deleted successfully."),
+          Err(err) => println!("Failed to delete file: {}", err),
       }
       
       let emit = |event: WatchEvent| {
