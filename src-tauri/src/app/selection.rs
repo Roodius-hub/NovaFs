@@ -28,7 +28,7 @@ impl Selection {
         self.selected.iter().any(|p| p == path )
     }
 
-    pub fn selected_item(&self) -> &[PathBuf] {
+    pub fn selected_items(&self) -> &[PathBuf] {
         &self.selected
     }
 }

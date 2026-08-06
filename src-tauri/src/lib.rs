@@ -1,7 +1,7 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 
 use std::path::Path;
-use crate::{filesystem::{events::{ScanEvent, WatchEvent}, operations::{create_file, delete}, scanner::scan, watcher::watch}};
+use crate::filesystem::{events::{ScanEvent, WatchEvent}, node::FileNode, operations::{create_file, delete}, scanner::scan, watcher::watch};
 
 pub mod db;
 pub mod models;
@@ -14,8 +14,13 @@ pub mod app;
 
 
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+pub fn scan_for_react(path: &str) -> Result<Vec<FileNode>, String> {
+    let mut emit = |event: ScanEvent| {
+        println!("{:?}", event);
+    };
+
+    scan(Path::new(path), &mut emit)
+        .map_err(|e| e.to_string())
 }
 
 // #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -27,11 +32,6 @@ pub fn run() {
      // tests::favorite_test::test_repository(); 
       // let tree = tests::scanner_test::test_scanner();
 
-      let mut emit = |event: ScanEvent| {
-          println!("{:?}", event);
-      };
-      
-      let tree = scan(Path::new("."), &mut emit).unwrap();
       
       // let results = filesystem::search::search(&tree, "main");
       // println!("{}","This is Your result".red());
@@ -43,21 +43,21 @@ pub fn run() {
       // println!("{:?}", result);
 
 
-      let size = filesystem::size::size(&tree);
-      let size_in_string = filesystem::size::format_size(size);
-      println!("size: => {}", size_in_string);
+      // let size = filesystem::size::size(&tree);
+      // let size_in_string = filesystem::size::format_size(size);
+      // println!("size: => {}", size_in_string);
 
       let meta = filesystem::metadata::get_metadata(Path::new("."));
       for val in meta.iter() {
           println!("{:?}", val);
       }
 
-      let makefile = Path::new("/home/roodi/Documents/hello.txt");
+      // let makefile = Path::new("/home/roodi/Documents/hello.txt");
       
-      match filesystem::operations::delete(makefile) {
-          Ok(()) => println!("File deleted successfully."),
-          Err(err) => println!("Failed to delete file: {}", err),
-      }
+      // match filesystem::operations::delete(makefile) {
+      //     Ok(()) => println!("File deleted successfully."),
+      //     Err(err) => println!("Failed to delete file: {}", err),
+      // }
       
       let emit = |event: WatchEvent| {
           println!("{:?}", event);
@@ -67,7 +67,7 @@ pub fn run() {
       
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![scan_for_react])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
