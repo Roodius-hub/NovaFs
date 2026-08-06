@@ -10,6 +10,7 @@ pub mod services;
 pub mod utils;
 pub mod tests;
 pub mod filesystem;
+pub mod app;
 
 
 #[tauri::command]
