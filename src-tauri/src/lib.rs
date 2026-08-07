@@ -14,7 +14,7 @@ pub mod app;
 
 
 #[tauri::command]
-pub fn scan_dir(path: &str) -> Result<Vec<FileNode>, String> {
+fn scan_dir(path: &str) -> Result<Vec<FileNode>, String> {
     let mut emit = |event: ScanEvent| {
         println!("{:?}", event);
     };
