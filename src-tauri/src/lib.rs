@@ -15,6 +15,8 @@ pub mod app;
 
 #[tauri::command]
 fn scan_dir(path: &str) -> Result<Vec<FileNode>, String> {
+    println!("scan_dir called with: {}", path);
+
     let mut emit = |event: ScanEvent| {
         println!("{:?}", event);
     };
@@ -59,11 +61,11 @@ pub fn run() {
       //     Err(err) => println!("Failed to delete file: {}", err),
       // }
       
-      let emit = |event: WatchEvent| {
-          println!("{:?}", event);
-      };
+      // let emit = |event: WatchEvent| {
+      //     println!("{:?}", event);
+      // };
       
-      watch(Path::new("."), emit);
+      // watch(Path::new("."), emit);
       
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())

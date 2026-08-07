@@ -23,7 +23,7 @@ pub fn scan<F>(path:&Path, emit: &mut F) -> io::Result<Vec<FileNode>> where F:Fn
         
 }
 
-pub fn scan_directory<F>(path: &Path, progress:&mut ScanProgress, emit: &mut F) -> io::Result<Vec<FileNode>> where F: FnMut(ScanEvent) {
+fn scan_directory<F>(path: &Path, progress:&mut ScanProgress, emit: &mut F) -> io::Result<Vec<FileNode>> where F: FnMut(ScanEvent) {
     let entries = std::fs::read_dir(path)?;
     let mut nodes = Vec::new();
     
@@ -50,7 +50,7 @@ pub fn scan_directory<F>(path: &Path, progress:&mut ScanProgress, emit: &mut F) 
     Ok(nodes)
 }
 
-pub fn scan_entry(entry:DirEntry) -> io::Result<FileNode> {
+ fn scan_entry(entry:DirEntry) -> io::Result<FileNode> {
     let entry = entry;
     let name = entry.file_name().to_string_lossy().to_string();
     let path = entry.path();
