@@ -14,7 +14,7 @@ pub mod app;
 
 
 #[tauri::command]
-pub fn scan_for_react(path: &str) -> Result<Vec<FileNode>, String> {
+pub fn scan_dir(path: &str) -> Result<Vec<FileNode>, String> {
     let mut emit = |event: ScanEvent| {
         println!("{:?}", event);
     };
@@ -67,7 +67,7 @@ pub fn run() {
       
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![scan_for_react])
+        .invoke_handler(tauri::generate_handler![scan_dir])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
